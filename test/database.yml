@@ -1,6 +1,6 @@
-test: 
+test:
   adapter:  postgresql
   host:     localhost
   database: hstore_translate_test
-  username: developer
+  username: postgres
   min_messages: warning

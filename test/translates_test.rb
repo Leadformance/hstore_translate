@@ -18,9 +18,15 @@ class TranslatesTest < Test::Unit::TestCase
     Post.establish_connection(db_config)
 
     unless Post.connection.select_value("SELECT proname FROM pg_proc WHERE proname = 'akeys'")
-      pg_sharedir = `pg_config --sharedir`.strip
-      hstore_script_path = File.join(pg_sharedir, "contrib", "hstore.sql")
-      Post.connection.execute(File.read(hstore_script_path))
+      pgversion = Post.connection.send(:postgresql_version)
+
+      if pgversion < 90100
+        pg_sharedir = `pg_config --sharedir`.strip
+        hstore_script_path = File.join(pg_sharedir, "contrib", "hstore.sql")
+        Post.connection.execute(File.read(hstore_script_path))
+      else
+        Post.connection.execute("CREATE EXTENSION IF NOT EXISTS hstore")
+      end
     end
 
     Post.connection.create_table(:posts, :force => true) do |t|
