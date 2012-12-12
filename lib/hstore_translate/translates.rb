@@ -46,7 +46,7 @@ module HstoreTranslate
 
     def method_missing_with_translates(method_name, *args)
       return method_missing_without_translates(method_name, *args) unless
-        method_name =~ /\A([a-z_]+)_([a-z]{2,2})(=?)\z/ &&
+        method_name =~ /\A([a-z_]+)_([a-z]{2})(=?)\z/ &&
         (attr_name = $1.to_sym) && translated_attrs.include?(attr_name)
 
       locale    = $2.to_sym
