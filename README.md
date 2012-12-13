@@ -5,7 +5,7 @@ hstore datatype. It provides an interface inspired by
 [Globalize3](https://github.com/svenfuchs/globalize3) but removes the need to 
 maintain separate translation tables.
 
-[![Build Status](https://api.travis-ci.org/robworley/hstore_translate.png)](https://api.travis-ci.org/robworley/hstore_translate.png)
+[![Build Status](https://api.travis-ci.org/robworley/hstore_translate.png)](https://travis-ci.org/robworley/hstore_translate)
 
 ## Requirements
 
