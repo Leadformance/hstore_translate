@@ -5,7 +5,6 @@ require 'active_record'
 require 'test/unit'
 
 require 'hstore_translate'
-require 'activerecord-postgres-hstore' unless HstoreTranslate::native_hstore?
 
 class Post < ActiveRecord::Base
   translates :title

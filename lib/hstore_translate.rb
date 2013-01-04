@@ -8,4 +8,6 @@ module HstoreTranslate
   end
 end
 
+require 'activerecord-postgres-hstore' unless HstoreTranslate::native_hstore?
+
 ActiveRecord::Base.extend(HstoreTranslate::Translates)
