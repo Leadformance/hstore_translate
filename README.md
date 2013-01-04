@@ -16,11 +16,14 @@ maintain separate translation tables.
 
 gem install hstore_translate
 
-When using bundler put it in your Gemfile:
+When using bundler, put it in your Gemfile:
 
 ```ruby
 source 'https://rubygems.org'
 
+gem 'pg'
+gem 'activerecord'
+gem 'activerecord-postgres-hstore', '~> 0.4.0' # only required for ActiveRecord 3.x
 gem 'hstore_translate'
 ```
 
