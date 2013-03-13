@@ -14,7 +14,14 @@ Gem::Specification.new do |s|
   s.require_paths     = ["lib"]
   s.rubyforge_project = '[none]'
 
-  s.add_dependency 'activerecord', ENV["ACTIVE_RECORD_VERSION"]
+  if ENV['RAILS_3_1']
+    s.add_dependency 'activerecord', '~> 3.1.0'
+  elsif ENV['RAILS_3_2']
+    s.add_dependency 'activerecord', '~> 3.2.0'
+  else
+    s.add_dependency 'activerecord', '>= 3.1.0'
+  end
+
   s.add_dependency 'activerecord-postgres-hstore', '~> 0.4.0'
 
   s.add_development_dependency 'rake'
