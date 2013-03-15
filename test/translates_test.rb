@@ -90,8 +90,14 @@ class TranslatesTest < Test::Unit::TestCase
     assert_raise(NoMethodError) { Post.new.other_fr }
   end
 
-  def test_persists_translations
+  def test_persists_translations_assigned_as_hash
     p = Post.create!(:title_translations => { "en" => "English Title", "fr" => "Titre français" })
+    p.reload
+    assert_equal({"en" => "English Title", "fr" => "Titre français"}, p.title_translations)
+  end
+
+  def test_persists_translations_assigned_to_localized_accessors
+    p = Post.create!(:title_en => "English Title", :title_fr => "Titre français")
     p.reload
     assert_equal({"en" => "English Title", "fr" => "Titre français"}, p.title_translations)
   end
