@@ -20,6 +20,7 @@ module HstoreTranslate
         RUBY
       end
 
+      alias_method_chain :respond_to?, :translates
       alias_method_chain :method_missing, :translates
     end
 
@@ -45,19 +46,33 @@ module HstoreTranslate
         value
       end
 
+      def respond_to_with_translates?(symbol, include_all = false)
+        return true if parse_translated_attribute_accessor(symbol)
+        respond_to_without_translates?(symbol, include_all)
+      end
+
       def method_missing_with_translates(method_name, *args)
-        return method_missing_without_translates(method_name, *args) unless
-          method_name =~ /\A([a-z_]+)_([a-z]{2})(=?)\z/ &&
-          (attr_name = $1.to_sym) && translated_attrs.include?(attr_name)
+        translated_attr_name, locale, assigning = parse_translated_attribute_accessor(method_name)
+
+        return method_missing_without_translates(method_name, *args) unless translated_attr_name
+
+        if assigning
+          write_hstore_translation(translated_attr_name, args.first, locale)
+        else
+          read_hstore_translation(translated_attr_name, locale)
+        end
+      end
+
+      def parse_translated_attribute_accessor(method_name)
+        return unless method_name =~ /\A([a-z_]+)_([a-z]{2})(=?)\z/
+
+        translated_attr_name = $1.to_sym
+        return unless translated_attrs.include?(translated_attr_name)
 
         locale    = $2.to_sym
         assigning = $3.present?
 
-        if assigning
-          write_hstore_translation(attr_name, args.first, locale)
-        else
-          read_hstore_translation(attr_name, locale)
-        end
+        [translated_attr_name, locale, assigning]
       end
     end
   end
