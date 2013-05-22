@@ -88,3 +88,26 @@ config.i18n.fallbacks = true
 
 Sven Fuchs wrote a [detailed explanation of the fallback
 mechanism](https://github.com/svenfuchs/i18n/wiki/Fallbacks).
+
+## Temporary disable fallbacks
+
+If you've enabled fallbacks for missing translations, you probably want to disable
+them in the admin interface to display which translations the user still has to
+fill in.
+
+From:
+
+```ruby
+I18n.locale = :en
+post.title # => This database rocks!
+post.title_nl # => This database rocks!
+```
+
+To:
+
+```ruby
+I18n.locale = :en
+post.title # => This database rocks!
+post.disable_fallback
+post.title_nl # => nil
+```

@@ -25,13 +25,17 @@ module HstoreTranslate
     end
 
     module InstanceMethods
+      def disable_fallback
+        @disable_fallback = true
+      end
+
       protected
 
       def read_hstore_translation(attr_name, locale = I18n.locale)
         translations = send("#{attr_name}_translations") || {}
         translation  = translations[locale.to_s]
 
-        if translation.nil? && I18n.respond_to?(:fallbacks) && (fallbacks = I18n.fallbacks[locale])
+        if @disable_fallback == nil && translation.nil? && I18n.respond_to?(:fallbacks) && (fallbacks = I18n.fallbacks[locale])
           fallbacks.find { |f| translation = translations[f.to_s] }
         end
 
