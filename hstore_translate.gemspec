@@ -23,6 +23,7 @@ Gem::Specification.new do |s|
     s.add_dependency 'activerecord', '>= 3.1.0'
   end
 
+  s.add_dependency 'pg'
   s.add_dependency 'activerecord-postgres-hstore', '~> 0.7.0'
 
   s.add_development_dependency 'rake'
