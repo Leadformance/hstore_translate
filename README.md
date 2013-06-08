@@ -89,7 +89,7 @@ config.i18n.fallbacks = true
 Sven Fuchs wrote a [detailed explanation of the fallback
 mechanism](https://github.com/svenfuchs/i18n/wiki/Fallbacks).
 
-## Temporary disable fallbacks
+## Temporarily disable fallbacks
 
 If you've enabled fallbacks for missing translations, you probably want to disable
 them in the admin interface to display which translations the user still has to
