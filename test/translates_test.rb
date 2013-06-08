@@ -65,6 +65,15 @@ class TranslatesTest < Test::Unit::TestCase
     end
   end
 
+  def test_persists_changes_in_specified_locale
+    I18n.with_locale(:en) do
+      p = Post.create!(:title_translations => { "en" => "Original Text" })
+      p.title_en = "Updated Text"
+      p.save!
+      assert_equal("Updated Text", Post.last.title_en)
+    end
+  end
+
   def test_retrieves_in_specified_locale
     I18n.with_locale(:en) do
       p = Post.new(:title_translations => { "en" => "English Title", "fr" => "Titre français" })
