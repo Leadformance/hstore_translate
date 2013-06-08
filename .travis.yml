@@ -4,8 +4,8 @@ before_script:
 env:
   - RAILS_3_1=true
   - RAILS_3_2=true
+  - RAILS_4=true
 rvm:
   - 1.9.3
-  - 1.9.2
   - rbx-19mode
   - ruby-head

@@ -19,6 +19,8 @@ Gem::Specification.new do |s|
     s.add_dependency 'activerecord', '~> 3.1.0'
   elsif ENV['RAILS_3_2']
     s.add_dependency 'activerecord', '~> 3.2.0'
+  elsif ENV['RAILS_4']
+    s.add_dependency 'activerecord', '4.0.0.rc1'
   else
     s.add_dependency 'activerecord', '>= 3.1.0'
   end
