@@ -7,6 +7,5 @@ env:
   - RAILS_4=true
 rvm:
   - 1.9.3
-  - 1.9.2
   - rbx-19mode
   - ruby-head
