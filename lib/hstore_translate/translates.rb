@@ -49,7 +49,7 @@ module HstoreTranslate
       def write_hstore_translation(attr_name, value, locale = I18n.locale)
         translation_store = "#{attr_name}_translations"
         translations = send(translation_store) || {}
-        send "#{translation_store}_will_change!" unless translations[locale.to_s] == value
+        send("#{translation_store}_will_change!") unless translations[locale.to_s] == value
         translations[locale.to_s] = value
         send("#{translation_store}=", translations)
         value
