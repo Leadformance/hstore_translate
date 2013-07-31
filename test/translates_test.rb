@@ -1,38 +1,7 @@
 # -*- encoding : utf-8 -*-
+require 'test_helper'
 
-require 'rubygems'
-require 'active_record'
-require 'test/unit'
-
-require 'hstore_translate'
-
-class Post < ActiveRecord::Base
-  translates :title
-end
-
-class TranslatesTest < Test::Unit::TestCase
-  def setup
-    db_config = YAML.load(File.open(File.join(File.dirname(__FILE__), 'database.yml')).read)['test']
-
-    Post.establish_connection(db_config)
-
-    unless Post.connection.select_value("SELECT proname FROM pg_proc WHERE proname = 'akeys'")
-      pgversion = Post.connection.send(:postgresql_version)
-
-      if pgversion < 90100
-        pg_sharedir = `pg_config --sharedir`.strip
-        hstore_script_path = File.join(pg_sharedir, "contrib", "hstore.sql")
-        Post.connection.execute(File.read(hstore_script_path))
-      else
-        Post.connection.execute("CREATE EXTENSION IF NOT EXISTS hstore")
-      end
-    end
-
-    Post.connection.create_table(:posts, :force => true) do |t|
-      t.column :title_translations, 'hstore'
-    end
-  end
-
+class TranslatesTest < HstoreTranslate::Test
   def test_assigns_in_current_locale
     I18n.with_locale(:en) do
       p = Post.new(:title => "English Title")
@@ -115,11 +84,11 @@ class TranslatesTest < Test::Unit::TestCase
   end
 
   def test_method_missing_delegates
-    assert_raise(NoMethodError) { Post.new.nonexistant_method }
+    assert_raises(NoMethodError) { Post.new.nonexistant_method }
   end
 
   def test_method_missing_delegates_non_translated_attributes
-    assert_raise(NoMethodError) { Post.new.other_fr }
+    assert_raises(NoMethodError) { Post.new.other_fr }
   end
 
   def test_persists_translations_assigned_as_hash
