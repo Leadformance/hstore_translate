@@ -35,12 +35,23 @@ module HstoreTranslate
 
       protected
 
+      def hstore_translate_fallback_locales(locale)
+        return if !!@disable_fallback || !I18n.respond_to?(:fallbacks)
+        I18n.fallbacks[locale]
+      end
+
       def read_hstore_translation(attr_name, locale = I18n.locale)
         translations = send("#{attr_name}_translations") || {}
         translation  = translations[locale.to_s]
 
-        if (@disable_fallback == nil || @disable_fallback == false) && translation.nil? && I18n.respond_to?(:fallbacks) && (fallbacks = I18n.fallbacks[locale])
-          fallbacks.find { |f| translation = translations[f.to_s] }
+        if fallback_locales = hstore_translate_fallback_locales(locale)
+          fallback_locales.each do |fallback_locale|
+            t = translations[fallback_locale.to_s]
+            if t && !t.empty? # differs from blank?
+              translation = t
+              break
+            end
+          end
         end
 
         translation
