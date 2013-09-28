@@ -2,6 +2,7 @@ module HstoreTranslate
   module Translates
     def translates(*attrs)
       include InstanceMethods
+      extend ClassMethods
 
       class_attribute :translated_attrs
       self.translated_attrs = attrs
@@ -16,6 +17,10 @@ module HstoreTranslate
 
           def #{attr_name}=(value)
             write_hstore_translation('#{attr_name}', value)
+          end
+          
+          def self.find_by_#{attr_name}(value)
+            find_hstore_translation('#{attr_name}', value)
           end
         RUBY
       end
@@ -93,6 +98,13 @@ module HstoreTranslate
         assigning = $3.present?
 
         [translated_attr_name, locale, assigning]
+      end
+    end
+    
+    module ClassMethods
+      def find_hstore_translation(attr_name, value, locale = I18n.locale)
+        translation_store = "#{attr_name}_translations"        
+        send(:where, "#{translation_store} @> hstore('#{locale}', '#{value}')").first
       end
     end
   end
