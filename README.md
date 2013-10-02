@@ -9,7 +9,7 @@ maintain separate translation tables.
 
 ## Requirements
 
-* ActiveRecord > 3.1.0
+* ActiveRecord > 3.1.0 (4+ for JRuby)
 * I18n
 
 ## Installation
@@ -21,9 +21,9 @@ When using bundler, put it in your Gemfile:
 ```ruby
 source 'https://rubygems.org'
 
-gem 'pg'
 gem 'activerecord'
-gem 'activerecord-postgres-hstore', '~> 0.4.0' # only required for ActiveRecord 3.x
+gem 'pg', :platform => :ruby
+gem 'activerecord-jdbcpostgresql-adapter', :platform => :jruby
 gem 'hstore_translate'
 ```
 
@@ -33,11 +33,11 @@ Model translations allow you to translate your models' attribute values. E.g.
 
 ```ruby
 class Post < ActiveRecord::Base
-  translates :title, :text
+  translates :title, :body
 end
 ```
 
-Allows you to translate the attributes :title and :text per locale:
+Allows you to translate the attributes :title and :body per locale:
 
 ```ruby
 I18n.locale = :en
@@ -63,7 +63,7 @@ class CreatePosts < ActiveRecord::Migration
   def up
     create_table :posts do |t|
       t.column :title_translations, 'hstore'
-      t.column :text_translations,  'hstore'
+      t.column :body_translations,  'hstore'
       t.timestamps
     end
   end
