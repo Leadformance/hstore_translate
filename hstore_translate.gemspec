@@ -10,6 +10,7 @@ Gem::Specification.new do |s|
   s.email             = 'robert.worley@gmail.com'
   s.homepage          = 'https://github.com/robworley/hstore_translate'
   s.platform          = Gem::Platform::RUBY
+  s.license           = 'MIT'
 
   s.files             = Dir['lib/**/*.rb', 'README.md', 'MIT-LICENSE']
   s.test_files        = Dir['test/**/*']
