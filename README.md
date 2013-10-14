@@ -55,6 +55,13 @@ post.title # => This database rocks!
 post.title_he # => אתר זה טוב
 ```
 
+To find records using translations without constructing hstore queries by hand:
+
+```ruby
+Post.with_title_translation("This database rocks!") # => #<ActiveRecord::Relation ...>
+Post.with_title_translation("אתר זה טוב", :he) # => #<ActiveRecord::Relation ...>
+```
+
 In order to make this work, you'll need to define an hstore column for each of
 your translated attributes, using the suffix "_translations":
 

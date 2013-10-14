@@ -17,8 +17,9 @@ module HstoreTranslate
           write_hstore_translation(attr_name, value)
         end
         
-        define_singleton_method "find_by_#{attr_name}" do |value|
-          find_hstore_translation(attr_name, value)
+        define_singleton_method "with_#{attr_name}_translation" do |value, locale = I18n.locale|
+          quoted_translation_store = connection.quote_column_name("#{attr_name}_translations")
+          where("#{quoted_translation_store} @> hstore(:locale, :value)", locale: locale, value: value)
         end
       end
 
@@ -96,11 +97,6 @@ module HstoreTranslate
 
         [translated_attr_name, locale, assigning]
       end
-    end
-    
-    def find_hstore_translation(attr_name, value, locale = I18n.locale)
-      quoted_translation_store = connection.quote_column_name("#{attr_name}_translations")
-      where("#{quoted_translation_store} @> hstore(:locale, :value)", locale: locale, value: value).first
     end
   end
 end
