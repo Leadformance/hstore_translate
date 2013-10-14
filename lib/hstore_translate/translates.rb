@@ -9,15 +9,18 @@ module HstoreTranslate
       attrs.each do |attr_name|
         serialize "#{attr_name}_translations", ActiveRecord::Coders::Hstore unless HstoreTranslate::native_hstore?
 
-        class_eval <<-RUBY
-          def #{attr_name}
-            read_hstore_translation('#{attr_name}')
-          end
-
-          def #{attr_name}=(value)
-            write_hstore_translation('#{attr_name}', value)
-          end
-        RUBY
+        define_method attr_name do
+          read_hstore_translation(attr_name)
+        end
+        
+        define_method "#{attr_name}=" do |value|
+          write_hstore_translation(attr_name, value)
+        end
+        
+        define_singleton_method "with_#{attr_name}_translation" do |value, locale = I18n.locale|
+          quoted_translation_store = connection.quote_column_name("#{attr_name}_translations")
+          where("#{quoted_translation_store} @> hstore(:locale, :value)", locale: locale, value: value)
+        end
       end
 
       alias_method_chain :respond_to?, :translates
