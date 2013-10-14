@@ -86,6 +86,20 @@ module HstoreTranslate
         end
       end
 
+      # Internal: Parse a translated convenience accessor name.
+      #
+      # method_name - The accessor name.
+      #
+      # Examples
+      #
+      #   parse_translated_attribute_accessor("title_en=")
+      #   # => [:title, :en, true]
+      #
+      #   parse_translated_attribute_accessor("title_fr")
+      #   # => [:title, :fr, false]
+      #
+      # Returns the attribute name Symbol, locale Symbol, and a Boolean
+      # indicating whether or not the caller is attempting to assign a value.
       def parse_translated_attribute_accessor(method_name)
         return unless method_name =~ /\A([a-z_]+)_([a-z]{2})(=?)\z/
 
