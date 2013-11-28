@@ -27,6 +27,12 @@ gem 'activerecord-jdbcpostgresql-adapter', :platform => :jruby
 gem 'hstore_translate'
 ```
 
+For ActiveRecord < 4.0 you'll also want to add:
+
+```ruby
+gem 'activerecord-postgres-hstore', '~> 0.7.0'
+```
+
 ## Model translations
 
 Model translations allow you to translate your models' attribute values. E.g.
