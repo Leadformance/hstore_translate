@@ -4,6 +4,7 @@ module HstoreTranslate
       include InstanceMethods
 
       class_attribute :translated_attrs
+      alias_attribute :translated_attribute_names, :translated_attrs
       self.translated_attrs = attrs
 
       attrs.each do |attr_name|
@@ -12,11 +13,11 @@ module HstoreTranslate
         define_method attr_name do
           read_hstore_translation(attr_name)
         end
-        
+
         define_method "#{attr_name}=" do |value|
           write_hstore_translation(attr_name, value)
         end
-        
+
         define_singleton_method "with_#{attr_name}_translation" do |value, locale = I18n.locale|
           quoted_translation_store = connection.quote_column_name("#{attr_name}_translations")
           where("#{quoted_translation_store} @> hstore(:locale, :value)", locale: locale, value: value)
@@ -25,6 +26,10 @@ module HstoreTranslate
 
       alias_method_chain :respond_to?, :translates
       alias_method_chain :method_missing, :translates
+    end
+
+    def translates?
+      included_modules.include?(InstanceMethods)
     end
 
     module InstanceMethods
