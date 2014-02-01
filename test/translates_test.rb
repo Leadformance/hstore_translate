@@ -112,11 +112,15 @@ class TranslatesTest < HstoreTranslate::Test
     p.reload
     assert_equal({"en" => "English Title", "fr" => "Titre français"}, p.title_translations)
   end
-  
+
   def test_with_translation_relation
     p = Post.create!(:title_translations => { "en" => "Alice in Wonderland", "fr" => "Alice au pays des merveilles" })
     I18n.with_locale(:en) do
       assert_equal p.title_en, Post.with_title_translation("Alice in Wonderland").first.try(:title)
     end
+  end
+
+  def test_class_method_translates?
+    assert_equal true, Post.translates?
   end
 end
