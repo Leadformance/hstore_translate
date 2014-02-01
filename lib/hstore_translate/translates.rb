@@ -4,7 +4,7 @@ module HstoreTranslate
       include InstanceMethods
 
       class_attribute :translated_attrs
-      alias_attribute :translated_attribute_names, :translated_attrs
+      alias_attribute :translated_attribute_names, :translated_attrs # Improve compatibility with the gem globalize
       self.translated_attrs = attrs
 
       attrs.each do |attr_name|
@@ -28,6 +28,7 @@ module HstoreTranslate
       alias_method_chain :method_missing, :translates
     end
 
+    # Improve compatibility with the gem globalize
     def translates?
       included_modules.include?(InstanceMethods)
     end
