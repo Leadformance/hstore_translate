@@ -1,8 +1,8 @@
 # hstore_translate
 
-Rails I18n library for ActiveRecord model/data translation using PostgreSQL's 
-hstore datatype. It provides an interface inspired by 
-[Globalize3](https://github.com/svenfuchs/globalize3) but removes the need to 
+Rails I18n library for ActiveRecord model/data translation using PostgreSQL's
+hstore datatype. It provides an interface inspired by
+[Globalize3](https://github.com/svenfuchs/globalize3) but removes the need to
 maintain separate translation tables.
 
 [![Build Status](https://api.travis-ci.org/robworley/hstore_translate.png)](https://travis-ci.org/robworley/hstore_translate)
@@ -123,4 +123,15 @@ I18n.locale = :en
 post.title # => This database rocks!
 post.disable_fallback
 post.title_nl # => nil
+```
+
+## Model validations
+
+It's possible to use some global validation features.
+
+```
+validates_hstore_translate :title, presence: true
+validates_hstore_translate :title, length: { minimum: 8 }
+validates_hstore_translate :title, length: { maximum: 200 }
+validates_hstore_translate :title, format: { with: /regexp/ }
 ```
