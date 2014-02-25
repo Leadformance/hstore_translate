@@ -3,6 +3,7 @@ require 'hstore_translate'
 
 require 'database_cleaner'
 DatabaseCleaner.strategy = :transaction
+I18n.enforce_available_locales = false
 
 class Post < ActiveRecord::Base
   translates :title
