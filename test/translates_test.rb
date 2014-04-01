@@ -81,6 +81,17 @@ class TranslatesTest < HstoreTranslate::Test
     end
   end
 
+  def test_retrieves_in_specified_locale_with_fallback_disabled_using_a_block
+    I18n::Backend::Simple.include(I18n::Backend::Fallbacks)
+    I18n.default_locale = :"en-US"
+
+    p = Post.new(:title_translations => { "en" => "English Title" })
+    p.enable_fallback
+
+    assert_equal("English Title", p.title_fr)
+    p.disable_fallback { assert_nil p.title_fr }
+  end
+
   def test_retrieves_in_specified_locale_with_fallback_reenabled
     I18n::Backend::Simple.include(I18n::Backend::Fallbacks)
     I18n.default_locale = :"en-US"
@@ -91,6 +102,17 @@ class TranslatesTest < HstoreTranslate::Test
     I18n.with_locale(:fr) do
       assert_equal("English Title", p.title_fr)
     end
+  end
+
+  def test_retrieves_in_specified_locale_with_fallback_reenabled_using_a_block
+    I18n::Backend::Simple.include(I18n::Backend::Fallbacks)
+    I18n.default_locale = :"en-US"
+
+    p = Post.new(:title_translations => { "en" => "English Title" })
+    p.disable_fallback
+
+    assert_nil(p.title_fr)
+    p.enable_fallback { assert_equal("English Title", p.title_fr) }
   end
 
   def test_method_missing_delegates

@@ -126,3 +126,19 @@ post.title # => This database rocks!
 post.disable_fallback
 post.title_nl # => nil
 ```
+
+You can also call your code into a block that temporarily disable or enable fallbacks.
+
+```ruby
+I18n.locale = :en
+post.title_nl # => This database rocks!
+
+post.disable_fallback do
+  post.title_nl # => nil
+end
+
+post.disable_fallback
+post.enable_fallback do
+  post.title_nl # => This database rocks!
+end
+```
