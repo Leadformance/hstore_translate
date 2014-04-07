@@ -7,6 +7,7 @@ maintain separate translation tables.
 
 [![Build Status](https://api.travis-ci.org/robworley/hstore_translate.png)](https://travis-ci.org/robworley/hstore_translate)
 [![License](http://img.shields.io/badge/license-mit-brightgreen.svg)](COPYRIGHT)
+[![Code Climate](https://codeclimate.com/github/robworley/hstore_translate.png)](https://codeclimate.com/github/robworley/hstore_translate)
 
 ## Requirements
 
