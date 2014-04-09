@@ -8,7 +8,7 @@ class Post < ActiveRecord::Base
   translates :title
 end
 
-class HstoreTranslate::Test < MiniTest::Unit::TestCase
+class HstoreTranslate::Test < Minitest::Test
   class << self
     def prepare_database
       create_database
@@ -60,6 +60,8 @@ class HstoreTranslate::Test < MiniTest::Unit::TestCase
   prepare_database
 
   def setup
+    I18n.available_locales = ['en', 'en-US', 'fr']
+    I18n.config.enforce_available_locales = true
     DatabaseCleaner.start
   end
 
