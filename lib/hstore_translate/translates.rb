@@ -34,18 +34,18 @@ module HstoreTranslate
     end
 
     module InstanceMethods
-      def disable_fallback
-        @disable_fallback = true
+      def disable_fallback(&block)
+        toggle_fallback(enabled = false, &block)
       end
 
-      def enable_fallback
-        @disable_fallback = false
+      def enable_fallback(&block)
+        toggle_fallback(enabled = true, &block)
       end
 
       protected
 
       def hstore_translate_fallback_locales(locale)
-        return if !!@disable_fallback || !I18n.respond_to?(:fallbacks)
+        return if @enabled_fallback == false || !I18n.respond_to?(:fallbacks)
         I18n.fallbacks[locale]
       end
 
@@ -116,6 +116,20 @@ module HstoreTranslate
         assigning = $3.present?
 
         [translated_attr_name, locale, assigning]
+      end
+
+      def toggle_fallback(enabled, &block)
+        if block_given?
+          old_value = @enabled_fallback
+          begin
+            @enabled_fallback = enabled
+            yield
+          ensure
+            @enabled_fallback = old_value
+          end
+        else
+          @enabled_fallback = enabled
+        end
       end
     end
   end
