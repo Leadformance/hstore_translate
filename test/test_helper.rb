@@ -4,6 +4,8 @@ require 'hstore_translate'
 require 'database_cleaner'
 DatabaseCleaner.strategy = :transaction
 
+MiniTest::Test = MiniTest::Unit::TestCase unless MiniTest.const_defined?(:Test) # Rails 4.0.x
+
 class Post < ActiveRecord::Base
   translates :title
 end
