@@ -4,11 +4,13 @@ require 'hstore_translate'
 require 'database_cleaner'
 DatabaseCleaner.strategy = :transaction
 
+MiniTest::Test = MiniTest::Unit::TestCase unless MiniTest.const_defined?(:Test) # Rails 4.0.x
+
 class Post < ActiveRecord::Base
   translates :title
 end
 
-class HstoreTranslate::Test < MiniTest::Unit::TestCase
+class HstoreTranslate::Test < Minitest::Test
   class << self
     def prepare_database
       create_database
@@ -60,6 +62,8 @@ class HstoreTranslate::Test < MiniTest::Unit::TestCase
   prepare_database
 
   def setup
+    I18n.available_locales = ['en', 'en-US', 'fr']
+    I18n.config.enforce_available_locales = true
     DatabaseCleaner.start
   end
 
