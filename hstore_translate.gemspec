@@ -19,6 +19,6 @@ Gem::Specification.new do |s|
   s.add_dependency 'activerecord', '>= 3.1.0'
 
   s.add_development_dependency 'rake'
-  s.add_development_dependency 'minitest', '~> 5.1'
+  s.add_development_dependency 'minitest', '>= 4.0'
   s.add_development_dependency 'database_cleaner'
 end
