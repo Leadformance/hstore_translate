@@ -2,6 +2,7 @@ module HstoreTranslate
   module Translates
     def translates(*attrs)
       include InstanceMethods
+      extend ClassMethods
 
       class_attribute :translated_attrs
       alias_attribute :translated_attribute_names, :translated_attrs # Improve compatibility with the gem globalize
@@ -19,8 +20,7 @@ module HstoreTranslate
         end
 
         define_singleton_method "with_#{attr_name}_translation" do |value, locale = I18n.locale|
-          quoted_translation_store = connection.quote_column_name("#{attr_name}_translations")
-          where("#{quoted_translation_store} @> hstore(:locale, :value)", locale: locale, value: value)
+          with_translated_attribute(attr_name, value, locale)
         end
       end
 
@@ -129,6 +129,18 @@ module HstoreTranslate
           end
         else
           @enabled_fallback = enabled
+        end
+      end
+    end
+
+    module ClassMethods
+      def with_translated_attribute(attr_name, value, locale = I18n.locale)
+        quoted_translation_store = connection.quote_column_name("#{attr_name}_translations")
+
+        if value.is_a?(Enumerable)
+          where("#{quoted_translation_store}->:locale IN (:value)", locale: locale, value: value)
+        else
+          where("#{quoted_translation_store} @> hstore(:locale, :value)", locale: locale, value: value)
         end
       end
     end
