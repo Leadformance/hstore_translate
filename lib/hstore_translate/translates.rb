@@ -22,6 +22,11 @@ module HstoreTranslate
           quoted_translation_store = connection.quote_column_name("#{attr_name}_translations")
           where("#{quoted_translation_store} @> hstore(:locale, :value)", locale: locale, value: value)
         end
+
+        define_singleton_method "order_by_#{attr_name}_translation" do |direction = :asc, locale = I18n.locale|
+          literal = Arel::SqlLiteral.new("#{attr_name}_translations->'#{locale}'")
+          order(literal.send(direction))
+        end
       end
 
       alias_method_chain :respond_to?, :translates

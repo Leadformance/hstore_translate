@@ -70,6 +70,14 @@ Post.with_title_translation("This database rocks!") # => #<ActiveRecord::Relatio
 Post.with_title_translation("אתר זה טוב", :he) # => #<ActiveRecord::Relation ...>
 ```
 
+To order records using translations without constructing hstore queries by hand:
+
+```ruby
+Post.order_by_title_translation # will order by :asc in current locale
+Post.order_by_title_translation(:asc)
+Post.order_by_title_translation(:desc, :he)
+```
+
 In order to make this work, you'll need to define an hstore column for each of
 your translated attributes, using the suffix "_translations":
 
