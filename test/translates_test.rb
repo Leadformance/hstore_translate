@@ -145,4 +145,14 @@ class TranslatesTest < HstoreTranslate::Test
   def test_class_method_translates?
     assert_equal true, Post.translates?
   end
+
+  def test_with_interpolation
+    p = Post.new(:title_translations => { "en" => "English %{interpolation}", "fr" => "%{interpolation} français" })
+    I18n.with_locale(:en) do
+      assert_equal("English Title", p.title(:interpolation => "Title"))
+    end
+    I18n.with_locale(:fr) do
+      assert_equal("Titre français", p.title(:interpolation => "Titre"))
+    end
+  end
 end
