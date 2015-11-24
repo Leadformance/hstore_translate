@@ -145,4 +145,8 @@ class TranslatesTest < HstoreTranslate::Test
   def test_class_method_translates?
     assert_equal true, Post.translates?
   end
+
+  def test_class_method_hstore_attribute_names
+    assert_equal Post.hstore_attribute_names, [:title_de, :title_en, :content_de, :content_en]
+  end
 end

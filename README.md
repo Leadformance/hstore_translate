@@ -142,3 +142,24 @@ post.enable_fallback do
   post.title_nl # => This database rocks!
 end
 ```
+
+## Strong parameters
+
+You can also get modified attribute names -- ideal for use with strong parameters -- with the `hstore_attribute_names` (aka globalize_attribute_names) method:
+
+````ruby
+Post.hstore_attribute_names # => [:title_en, :title_nl]
+````
+
+Example with strong parameters:
+
+````ruby
+params.require(:post).permit(*Post.hstore_attribute_names)
+````
+
+If you need to permit non-translatable attributes as well, you could include them with:
+
+````ruby
+permitted = Post.hstore_attribute_names + [:position]
+params.require(:post).permit(*permitted)
+````

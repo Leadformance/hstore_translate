@@ -1,4 +1,5 @@
 *.gem
+.byebug_history
 .bundle
 Gemfile.lock
 pkg/*
