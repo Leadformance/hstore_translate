@@ -1,3 +1,5 @@
+Unfortunately @Leadformance not support hstore_translate, I will have some time to develop.
+
 # hstore_translate
 
 Rails I18n library for ActiveRecord model/data translation using PostgreSQL's
@@ -5,9 +7,9 @@ hstore datatype. It provides an interface inspired by
 [Globalize3](https://github.com/svenfuchs/globalize3) but removes the need to
 maintain separate translation tables.
 
-[![Build Status](https://api.travis-ci.org/robworley/hstore_translate.png)](https://travis-ci.org/robworley/hstore_translate)
+[![Build Status](https://api.travis-ci.org/lorenso/hstore_translate.png)](https://travis-ci.org/lorenso/hstore_translate)
 [![License](http://img.shields.io/badge/license-mit-brightgreen.svg)](COPYRIGHT)
-[![Code Climate](https://codeclimate.com/github/robworley/hstore_translate.png)](https://codeclimate.com/github/robworley/hstore_translate)
+[![Code Climate](https://codeclimate.com/github/lorenso/hstore_translate.png)](https://codeclimate.com/github/lorenso/hstore_translate)
 
 ## Requirements
 
