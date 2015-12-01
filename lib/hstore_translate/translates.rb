@@ -4,10 +4,16 @@ module HstoreTranslate
       include InstanceMethods
 
       class_attribute :translated_attrs
+      class_attribute :hstore_attribute_names
       alias_attribute :translated_attribute_names, :translated_attrs # Improve compatibility with the gem globalize
       self.translated_attrs = attrs
+      self.hstore_attribute_names = []
 
       attrs.each do |attr_name|
+        I18n.available_locales.each do |locale|
+          self.hstore_attribute_names << "#{attr_name}_#{locale}".to_sym
+        end
+
         serialize "#{attr_name}_translations", ActiveRecord::Coders::Hstore unless HstoreTranslate::native_hstore?
 
         define_method attr_name do

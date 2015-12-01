@@ -1,3 +1,5 @@
+Unfortunately @Leadformance not support hstore_translate, I will have some time to develop.
+
 # hstore_translate
 
 Rails I18n library for ActiveRecord model/data translation using PostgreSQL's
@@ -5,9 +7,9 @@ hstore datatype. It provides an interface inspired by
 [Globalize3](https://github.com/svenfuchs/globalize3) but removes the need to
 maintain separate translation tables.
 
-[![Build Status](https://api.travis-ci.org/robworley/hstore_translate.png)](https://travis-ci.org/robworley/hstore_translate)
+[![Build Status](https://api.travis-ci.org/lorenso/hstore_translate.png)](https://travis-ci.org/lorenso/hstore_translate)
 [![License](http://img.shields.io/badge/license-mit-brightgreen.svg)](COPYRIGHT)
-[![Code Climate](https://codeclimate.com/github/robworley/hstore_translate.png)](https://codeclimate.com/github/robworley/hstore_translate)
+[![Code Climate](https://codeclimate.com/github/lorenso/hstore_translate.png)](https://codeclimate.com/github/lorenso/hstore_translate)
 
 ## Requirements
 
@@ -142,3 +144,24 @@ post.enable_fallback do
   post.title_nl # => This database rocks!
 end
 ```
+
+## Strong parameters
+
+You can also get modified attribute names -- ideal for use with strong parameters -- with the `hstore_attribute_names` (aka globalize_attribute_names) method:
+
+````ruby
+Post.hstore_attribute_names # => [:title_en, :title_nl]
+````
+
+Example with strong parameters:
+
+````ruby
+params.require(:post).permit(*Post.hstore_attribute_names)
+````
+
+If you need to permit non-translatable attributes as well, you could include them with:
+
+````ruby
+permitted = Post.hstore_attribute_names + [:position]
+params.require(:post).permit(*permitted)
+````
