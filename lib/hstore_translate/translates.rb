@@ -8,7 +8,7 @@ module HstoreTranslate
 
       self.translated_attrs ||= []
 
-      if (!self.translated_attrs.empty?)
+      if (self.translated_attrs.empty?)
         alias_method_chain :respond_to?, :translates
         alias_method_chain :method_missing, :translates
       end
