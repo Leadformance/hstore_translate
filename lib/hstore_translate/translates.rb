@@ -3,12 +3,12 @@ module HstoreTranslate
     def translates(*attrs)
       include InstanceMethods
 
-      class_attribute :translated_attrs
-      alias_attribute :translated_attribute_names, :translated_attrs # Improve compatibility with the gem globalize
+      unless self.respond_to?(:translated_attrs)
+        class_attribute :translated_attrs
+        alias_attribute :translated_attribute_names, :translated_attrs # Improve compatibility with the gem globalize
 
-      self.translated_attrs ||= []
+        self.translated_attrs ||= []
 
-      if (self.translated_attrs.empty?)
         alias_method_chain :respond_to?, :translates
         alias_method_chain :method_missing, :translates
       end
