@@ -1,5 +1,7 @@
 module HstoreTranslate
   module Translates
+    SUFFIX = "_translations"
+
     def translates(*attrs)
       include InstanceMethods
 
@@ -8,7 +10,7 @@ module HstoreTranslate
       self.translated_attrs = attrs
 
       attrs.each do |attr_name|
-        serialize "#{attr_name}_translations", ActiveRecord::Coders::Hstore unless HstoreTranslate::native_hstore?
+        serialize "#{attr_name}#{SUFFIX}", ActiveRecord::Coders::Hstore unless HstoreTranslate::native_hstore?
 
         define_method attr_name do
           read_hstore_translation(attr_name)
@@ -19,7 +21,7 @@ module HstoreTranslate
         end
 
         define_singleton_method "with_#{attr_name}_translation" do |value, locale = I18n.locale|
-          quoted_translation_store = connection.quote_column_name("#{attr_name}_translations")
+          quoted_translation_store = connection.quote_column_name("#{attr_name}#{SUFFIX}")
           where("#{quoted_translation_store} @> hstore(:locale, :value)", locale: locale, value: value)
         end
       end
@@ -50,7 +52,7 @@ module HstoreTranslate
       end
 
       def read_hstore_translation(attr_name, locale = I18n.locale)
-        translations = send("#{attr_name}_translations") || {}
+        translations = send("#{attr_name}#{SUFFIX}") || {}
         translation  = translations[locale.to_s]
 
         if fallback_locales = hstore_translate_fallback_locales(locale)
@@ -67,7 +69,7 @@ module HstoreTranslate
       end
 
       def write_hstore_translation(attr_name, value, locale = I18n.locale)
-        translation_store = "#{attr_name}_translations"
+        translation_store = "#{attr_name}#{SUFFIX}"
         translations = send(translation_store) || {}
         send("#{translation_store}_will_change!") unless translations[locale.to_s] == value
         translations[locale.to_s] = value
