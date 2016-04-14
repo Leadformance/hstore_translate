@@ -144,5 +144,14 @@ class TranslatesTest < HstoreTranslate::Test
 
   def test_class_method_translates?
     assert_equal true, Post.translates?
+    assert_equal true, Comment.translates?
+  end
+
+  def test_model_with_double_translates_definition
+    I18n.with_locale(:en) do
+      c = Comment.new(:name => "Wadus", :body => "LOL nice post my friend")
+      assert_equal("Wadus", c.name_translations['en'])
+      assert_equal("LOL nice post my friend", c.body_translations['en'])
+    end
   end
 end
