@@ -1,7 +1,7 @@
 require 'minitest/autorun'
 require 'hstore_translate'
-
 require 'database_cleaner'
+
 DatabaseCleaner.strategy = :transaction
 
 MiniTest::Test = MiniTest::Unit::TestCase unless MiniTest.const_defined?(:Test) # Rails 4.0.x
@@ -10,11 +10,17 @@ class Post < ActiveRecord::Base
   translates :title
 end
 
+class Comment < ActiveRecord::Base
+  translates :name
+  translates :body
+end
+
 class HstoreTranslate::Test < Minitest::Test
   class << self
     def prepare_database
       create_database
-      create_table
+      create_posts_table
+      create_comments_table
     end
 
     private
@@ -51,10 +57,18 @@ class HstoreTranslate::Test < Minitest::Test
       end
     end
 
-    def create_table
+    def create_posts_table
       connection = establish_connection(db_config)
       connection.create_table(:posts, :force => true) do |t|
         t.column :title_translations, 'hstore'
+      end
+    end
+
+    def create_comments_table
+      connection = establish_connection(db_config)
+      connection.create_table(:comments, :force => true) do |t|
+        t.column :name_translations, 'hstore'
+        t.column :body_translations, 'hstore'
       end
     end
   end
