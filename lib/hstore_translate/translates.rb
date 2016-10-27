@@ -26,8 +26,11 @@ module HstoreTranslate
         end
       end
 
-      alias_method_chain :respond_to?, :translates
-      alias_method_chain :method_missing, :translates
+      alias_method :respond_to_without_translates?, :respond_to?
+      alias_method :respond_to?, :respond_to_with_translates?
+
+      alias_method :method_missing_without_translates, :method_missing
+      alias_method :method_missing, :method_missing_with_translates
     end
 
     # Improve compatibility with the gem globalize
