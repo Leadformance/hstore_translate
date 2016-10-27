@@ -47,6 +47,23 @@ module HstoreTranslate
         toggle_fallback(enabled = true, &block)
       end
 
+      def respond_to_with_translates?(symbol, include_all = false)
+        return true if parse_translated_attribute_accessor(symbol)
+        respond_to_without_translates?(symbol, include_all)
+      end
+
+      def method_missing_with_translates(method_name, *args)
+        translated_attr_name, locale, assigning = parse_translated_attribute_accessor(method_name)
+
+        return method_missing_without_translates(method_name, *args) unless translated_attr_name
+
+        if assigning
+          write_hstore_translation(translated_attr_name, args.first, locale)
+        else
+          read_hstore_translation(translated_attr_name, locale)
+        end
+      end
+
       protected
 
       def hstore_translate_fallback_locales(locale)
@@ -78,23 +95,6 @@ module HstoreTranslate
         translations[locale.to_s] = value
         send("#{translation_store}=", translations)
         value
-      end
-
-      def respond_to_with_translates?(symbol, include_all = false)
-        return true if parse_translated_attribute_accessor(symbol)
-        respond_to_without_translates?(symbol, include_all)
-      end
-
-      def method_missing_with_translates(method_name, *args)
-        translated_attr_name, locale, assigning = parse_translated_attribute_accessor(method_name)
-
-        return method_missing_without_translates(method_name, *args) unless translated_attr_name
-
-        if assigning
-          write_hstore_translation(translated_attr_name, args.first, locale)
-        else
-          read_hstore_translation(translated_attr_name, locale)
-        end
       end
 
       # Internal: Parse a translated convenience accessor name.
