@@ -12,8 +12,13 @@ module HstoreTranslate
       attrs.each do |attr_name|
         serialize "#{attr_name}#{SUFFIX}", ActiveRecord::Coders::Hstore unless HstoreTranslate::native_hstore?
 
-        define_method attr_name do
-          read_hstore_translation(attr_name)
+        define_method attr_name do |args=nil|
+          translation = read_hstore_translation(attr_name)
+          if args
+            I18n.interpolate(translation, args)
+          else
+            translation
+          end
         end
 
         define_method "#{attr_name}=" do |value|
