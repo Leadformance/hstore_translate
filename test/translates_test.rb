@@ -142,6 +142,30 @@ class TranslatesTest < HstoreTranslate::Test
     end
   end
 
+  def test_default_order_by_translation_relation
+    Post.create!(:title_translations => { "en" => "Bob in Wonderland" })
+    p = Post.create!(:title_translations => { "en" => "Alice in Wonderland" })
+    I18n.with_locale(:en) do
+      assert_equal p.title_en, Post.order_by_title_translation.first.try(:title)
+    end
+  end
+
+  def test_asc_order_by_translation_relation
+    Post.create!(:title_translations => { "en" => "Bob in Wonderland" })
+    p = Post.create!(:title_translations => { "en" => "Alice in Wonderland" })
+    I18n.with_locale(:en) do
+      assert_equal p.title_en, Post.order_by_title_translation(:asc).first.try(:title)
+    end
+  end
+
+  def test_desc_order_by_translation_relation
+    p = Post.create!(:title_translations => { "en" => "Bob in Wonderland" })
+    Post.create!(:title_translations => { "en" => "Alice in Wonderland" })
+    I18n.with_locale(:en) do
+      assert_equal p.title_en, Post.order_by_title_translation(:desc).first.try(:title)
+    end
+  end
+
   def test_class_method_translates?
     assert_equal true, Post.translates?
   end
