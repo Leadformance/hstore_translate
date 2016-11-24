@@ -1,5 +1,7 @@
 # hstore_translate
 
+Development of this library is continuing at <https://github.com/cfabianski/json_translate>.
+
 Rails I18n library for ActiveRecord model/data translation using PostgreSQL's
 hstore datatype. It provides an interface inspired by
 [Globalize3](https://github.com/svenfuchs/globalize3) but removes the need to
