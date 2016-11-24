@@ -5,11 +5,18 @@ module HstoreTranslate
     def translates(*attrs)
       include InstanceMethods
 
-      class_attribute :translated_attrs
-      alias_attribute :translated_attribute_names, :translated_attrs # Improve compatibility with the gem globalize
-      self.translated_attrs = attrs
+      unless self.respond_to?(:translated_attrs)
+        class_attribute :translated_attrs
+        alias_attribute :translated_attribute_names, :translated_attrs # Improve compatibility with the gem globalize
+
+        self.translated_attrs ||= []
+
+        alias_method_chain :respond_to?, :translates
+        alias_method_chain :method_missing, :translates
+      end
 
       attrs.each do |attr_name|
+        self.translated_attrs << attr_name
         serialize "#{attr_name}#{SUFFIX}", ActiveRecord::Coders::Hstore unless HstoreTranslate::native_hstore?
 
         define_method attr_name do
@@ -25,9 +32,6 @@ module HstoreTranslate
           where("#{quoted_translation_store} @> hstore(:locale, :value)", locale: locale, value: value)
         end
       end
-
-      alias_method_chain :respond_to?, :translates
-      alias_method_chain :method_missing, :translates
     end
 
     # Improve compatibility with the gem globalize
