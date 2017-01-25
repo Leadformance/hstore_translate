@@ -11,9 +11,22 @@ class TranslatesTest < HstoreTranslate::Test
 
   def test_retrieves_in_current_locale
     p = Post.new(:title_translations => { "en" => "English Title", "fr" => "Titre français" })
+
     I18n.with_locale(:fr) do
       assert_equal("Titre français", p.title)
     end
+  end
+
+  def test_retrieves_with_locale_and_region
+    p = Post.new(:title_translations => { "fr" => "Titre français" })
+
+    I18n.with_locale(:"en-US") do
+      assert_nil(p.title)
+      p.title_translations = { 'en-US' => 'American Title' }
+      assert_equal('American Title', p.title)
+    end
+
+    assert_equal('American Title', p.title_en_US)
   end
 
   def test_retrieves_in_current_locale_with_fallbacks
