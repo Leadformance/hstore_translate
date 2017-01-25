@@ -77,15 +77,16 @@ your translated attributes, using the suffix "_translations":
 
 ```ruby
 class CreatePosts < ActiveRecord::Migration
-  def up
+  def change
     create_table :posts do |t|
-      t.column :title_translations, 'hstore'
-      t.column :body_translations,  'hstore'
+      t.hstore :title_translations
+      t.hstore :body_translations
       t.timestamps
     end
-  end
-  def down
-    drop_table :posts
+
+    # It only works with Rails 4.
+    add_index :posts, :title_translations, using: :gin
+    add_index :posts, :body_translations, using: :gin
   end
 end
 ```
